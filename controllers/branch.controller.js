@@ -17,6 +17,8 @@ const addBranch = async (req, res) => {
   }
 };
 
+
+
 const getAllBranches = async (req, res) => {
   try {
     const branches = await pool.query(`

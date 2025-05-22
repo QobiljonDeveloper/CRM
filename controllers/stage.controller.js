@@ -1,5 +1,18 @@
 const pool = require("../config/db");
 const { sendErrorResponse } = require("../helpers/send_error_response");
+const DeviceDetector = require("node-device-detector");
+const DeviceHelper = require("node-device-detector/helper");
+
+
+const detector = new DeviceDetector({
+  clientIndexes: true,
+  deviceIndexes: true,
+  osIndexes: true,
+  deviceAliasCode: false,
+  deviceTrusted: false,
+  deviceInfo: false,
+  maxUserAgentSize: 500,
+});
 
 const addStage = async (req, res) => {
   try {
@@ -21,6 +34,14 @@ const addStage = async (req, res) => {
 
 const getAllStages = async (req, res) => {
   try {
+    const userAgent = req.headers["user-agent"];
+    console.log(userAgent);
+
+    const result = detector.detect(userAgent);
+
+    console.log("result parse", result);
+    console.log(DeviceHelper.isDesktop)
+    
     const newStages = await pool.query(`
     SELECT * FROM stage
         `);
@@ -76,7 +97,8 @@ const updateStage = async (req, res) => {
 const removeStage = async (req, res) => {
   const { id } = req.params;
 
-  try {a
+  try {
+    a;
     const existingStage = await pool.query(
       `SELECT * FROM stage WHERE id = $1`,
       [id]
